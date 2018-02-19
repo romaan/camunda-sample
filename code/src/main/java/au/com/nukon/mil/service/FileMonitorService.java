@@ -1,5 +1,6 @@
 package au.com.nukon.mil.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.*;
@@ -10,13 +11,16 @@ import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 @Service
 public class FileMonitorService {
 
+    @Autowired
+    private DataUploadService dataUploadService;
+
     private final WatchService watcher;
 
     public FileMonitorService() throws IOException {
         this.watcher = FileSystems.getDefault().newWatchService();
     }
 
-    private void monitor(Path dir) throws IOException {
+    public void monitor(Path dir) throws IOException {
         // See StandardWatchEventKinds for more event types.
         dir.register(this.watcher, ENTRY_MODIFY);
 
@@ -40,6 +44,7 @@ public class FileMonitorService {
                 Path modifiedPath = (Path) event.context();
                 System.out.printf("%s modified %d times.%n",
                         modifiedPath, event.count());
+                dataUploadService.uploadData(modifiedPath);
 
                 // Reset to receive further events:
                 // False means that the key became invalid.
