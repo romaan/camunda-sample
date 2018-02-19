@@ -32,3 +32,7 @@ In POM.xml you will find camunda-bpm-spring-boot-starter-webapp:2.3.0 and spring
 Add the dependency: camunda-bpm-spring-boot-starter-rest to POM.xml
 
 Visit the [URL to ensure REST service is working](http://localhost:8080/rest/engine) 
+
+### External Rest Server
+
+The sibling directory "rest" exists to run a dummy rest server. In order to setup and run, please refer to its README.md. Some of the use cases presented in this "code" directory depend on "rest" service

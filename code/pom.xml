@@ -10,6 +10,10 @@
     <name>Mil-Integration</name>
     <description>Mil Integration service</description>
 
+    <properties>
+        <camunda.version>7.8.0</camunda.version>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -18,6 +22,13 @@
                 <version>1.5.8.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.camunda.bpm</groupId>
+                <artifactId>camunda-bom</artifactId>
+                <version>${camunda.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -35,11 +46,58 @@
             <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
             <version>2.3.0</version>
         </dependency>
+        <!-- Camunda HTTP Client -->
+        <dependency>
+            <groupId>org.camunda.connect</groupId>
+            <artifactId>camunda-connect-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.camunda.connect</groupId>
+            <artifactId>camunda-connect-connectors-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.camunda.bpm</groupId>
+            <artifactId>camunda-engine-plugin-connect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.camunda.commons</groupId>
+            <artifactId>camunda-commons-utils</artifactId>
+        </dependency>
+        <!-- Camunda Spin JSON -->
+        <dependency>
+            <groupId>org.camunda.bpm</groupId>
+            <artifactId>camunda-engine-plugin-spin</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.camunda.spin</groupId>
+            <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!-- H2 Database dependency -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.196</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-hibernate -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.camunda.bpm.extension.mockito</groupId>
+            <artifactId>camunda-bpm-mockito</artifactId>
+            <scope>test</scope>
+            <version>3.1.0</version>
         </dependency>
     </dependencies>
 

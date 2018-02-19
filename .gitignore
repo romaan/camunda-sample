@@ -1,4 +1,7 @@
 .idea/
+.DS_Store
+rest/.env/
+*.pyc
 code/.idea/
 code/target/
 code/pom.xml.tag

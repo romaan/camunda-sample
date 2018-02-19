@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.11.3">
+  <bpmn:process id="CustomerOrder" name="Customer Order" isExecutable="true">
+    <bpmn:startEvent id="customerOrderStart" name="Customer Order Starts">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="orderID" label="Order ID" type="string" />
+          <camunda:formField id="outletID" label="Outlet ID" type="string" />
+          <camunda:formField id="startTime" label="Start Time" type="date" />
+          <camunda:formField id="endTime" label="End Time" type="date" />
+          <camunda:formField id="flowRate" label="Flow Rate" type="long" />
+        </camunda:formData>
+        <camunda:executionListener class="au.com.nukon.mil.adapters.CustomerOrderAdapter" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_0flalxv</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="customerOrderEnds" name="Customer Order Ends">
+      <bpmn:incoming>SequenceFlow_1802cq4</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0flalxv" sourceRef="customerOrderStart" targetRef="RESTInformer" />
+    <bpmn:sequenceFlow id="SequenceFlow_1802cq4" sourceRef="RESTInformer" targetRef="customerOrderEnds" />
+    <bpmn:serviceTask id="RESTInformer" name="REST Informer">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://localhost:5000/todo/api/v1.0/tasks</camunda:inputParameter>
+            <camunda:inputParameter name="method">GET</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0flalxv</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1802cq4</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CustomerOrder">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="customerOrderStart">
+        <dc:Bounds x="185" y="134" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="164" y="170" width="79" height="25" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1abhbxg_di" bpmnElement="customerOrderEnds">
+        <dc:Bounds x="525.687" y="134" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="504" y="173" width="79" height="25" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0flalxv_di" bpmnElement="SequenceFlow_0flalxv">
+        <di:waypoint xsi:type="dc:Point" x="221" y="152" />
+        <di:waypoint xsi:type="dc:Point" x="332" y="152" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="276.5" y="130.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1802cq4_di" bpmnElement="SequenceFlow_1802cq4">
+        <di:waypoint xsi:type="dc:Point" x="432" y="152" />
+        <di:waypoint xsi:type="dc:Point" x="526" y="152" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="479" y="130.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_03aa4dk_di" bpmnElement="RESTInformer">
+        <dc:Bounds x="332" y="112" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
