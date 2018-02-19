@@ -1,0 +1,11 @@
+.idea/
+code/.idea/
+code/target/
+code/pom.xml.tag
+code/pom.xml.releaseBackup
+code/pom.xml.versionsBackup
+code/pom.xml.next
+code/release.properties
+code/dependency-reduced-pom.xml
+code/buildNumber.properties
+code/.mvn/timing.properties
