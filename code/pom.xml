@@ -7,6 +7,8 @@
     <groupId>au.com.nukon.mil</groupId>
     <artifactId>integration</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>Mil-Integration</name>
+    <description>Mil Integration service</description>
 
     <dependencyManagement>
         <dependencies>
@@ -21,14 +23,17 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- Camunda Spring boot dependency -->
         <dependency>
             <groupId>org.camunda.bpm.springboot</groupId>
             <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
             <version>2.3.0</version>
         </dependency>
+        <!-- H2 Database dependency -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <version>1.4.196</version>
         </dependency>
     </dependencies>
 
