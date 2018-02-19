@@ -27,4 +27,8 @@ NOTE: The development version uses H2 database, for more development configurati
 
 In POM.xml you will find camunda-bpm-spring-boot-starter-webapp:2.3.0 and spring-boot-dependencies:2.3.0. This information comes from the [compatibility table](https://docs.camunda.org/manual/latest/user-guide/spring-boot-integration/version-compatibility/)
 
+### Camunda Rest Service
 
+Add the dependency: camunda-bpm-spring-boot-starter-rest to POM.xml
+
+Visit the [URL to ensure REST service is working](http://localhost:8080/rest/engine) 

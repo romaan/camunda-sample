@@ -9,3 +9,4 @@ code/release.properties
 code/dependency-reduced-pom.xml
 code/buildNumber.properties
 code/.mvn/timing.properties
+*.iml
