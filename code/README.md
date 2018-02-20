@@ -67,4 +67,4 @@ BPM: orders_workflow.bpmn
 
 ### MID-167 File Drop Interface IN Example
 
-Monitor file system for changes and load the CSV into memory
+Monitor file system for changes and load the CSV into memory. There is also a test case DataUploadTest to confirm that the CSV is uploaded and saved in the DB.

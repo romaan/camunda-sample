@@ -1,9 +1,9 @@
 datasource:
   bpm:
-    url: jdbc:h2:mem:bpm
+    url: jdbc:h2:mem:bpm;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
   model:
-    url: jdbc:h2:mem:app
+    url: jdbc:h2:mem:app;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
 
 camunda.bpm:
@@ -22,8 +22,11 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:h2:mem:app
+    url: jdbc:h2:mem:app;DB_CLOSE_ON_EXIT=FALSE
   h2:
     console:
       enabled: true
       path: /h2-console
+
+file-monitor:
+  path: /tmp/change
