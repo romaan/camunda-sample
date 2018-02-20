@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -41,7 +42,9 @@ public class DataUploadService {
         CustomerOrder item = new CustomerOrder();
         item.setOrderID(new Long(NumberUtils.toLong(p[0])));
         item.setOutletID(p[1]);
-        item.setFlowRate(NumberUtils.toLong(p[2]));
+        item.setStartTime(Instant.parse(p[2]));
+        item.setEndTime(Instant.parse(p[3]));
+        item.setFlowRate(NumberUtils.toLong(p[4]));
         return item;
     };
 }

@@ -37,5 +37,20 @@ def create_task():
     return jsonify({'task': task}), 201
 
 
+@app.route('/todo/api/v1.0/orders', methods=['POST'])
+def create_orders():
+    if not request.json:
+        abort(400)
+    for task in request.json:
+        task = {
+            'orderID': task.get('orderID'),
+            'outletID': task.get('outletID'),
+            'startTime': task.get('startTime'),
+            'endTime': task.get('endTime'),
+            'flowRate': task.get('flowRate')
+        }
+        tasks.append(task)
+    return jsonify({'task': task}), 201
+
 if __name__ == '__main__':
     app.run(debug=True)

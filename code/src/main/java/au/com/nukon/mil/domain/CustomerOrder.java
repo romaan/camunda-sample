@@ -2,8 +2,6 @@ package au.com.nukon.mil.domain;
 
 
 import java.time.Instant;
-
-import javax.annotation.Generated;
 import javax.persistence.*;
 import java.io.Serializable;
 

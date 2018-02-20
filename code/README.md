@@ -43,15 +43,52 @@ The sibling directory "rest" exists to run a dummy rest server. In order to setu
 
 BPM: customer_order.bpmn
 
+In a human task, the following data is entered into a form:
+
+- Outlet ID
+- Start Time
+- End Time
+- Flow Rate
+
+The single record is saved to a customer_orders DB table and returned - Order ID
+
+The single record is sent to an external REST API on the SCADA system
+
 TODO: 
 
-- Implement test case
-- Parse date and time stamp
-- Pass stored unique ID from DB back to service task
+- Complete test case with mocking external HTTP call
 
 ### MID-163 - Camunda SCADA Interface Out Example 2
 
 BPM: count_orders.bpmn
+
+Entry point 1: An external system calls a REST API in Camunda with parameters:
+- Start Time
+- End Time
+
+Entry point 2: A scheduled process triggers once an hour at XX:59:00 and determines the following:
+- Start Time = The coming hour roll-over (i.e the time in 1 minute; 10:00:00 if triggered at 09:59:00)
+- End Time = Start Time + 1 hour
+
+The orders that fall between Start Time and End Time are retrieved from the customer_orders DB table
+
+Those orders are sent to the same SCADA REST API as in Workflow #1 (You should decide whether it is preferable to iterate the records and sent them individually (in production there may be as many as 150 per batch) or to send them as a single payload. If a single payload, the SCADA API will need to be updated or a new one written)
+
+To trigger a REST call make the following REST API call:
+POST: http://localhost:8080/rest/message
+{
+	"messageName":"GetOrders",
+	"processVariables": {
+    	"startTime":{
+        	"value": "2013-02-12T23:00:00.000Z",
+        	"type": "string"
+    	},
+       "endTime":{
+        	"value": "2015-02-12T23:00:00.000Z",
+        	"type": "string"
+    	}
+	}
+}
 
 ### MID-164 - SCADA Interface In Example
 
@@ -68,3 +105,10 @@ BPM: orders_workflow.bpmn
 ### MID-167 File Drop Interface IN Example
 
 Monitor file system for changes and load the CSV into memory. There is also a test case DataUploadTest to confirm that the CSV is uploaded and saved in the DB.
+
+## Camunda Rest
+
+Get Engine Name:
+ - http://localhost:8080/rest/engine
+ 
+ 

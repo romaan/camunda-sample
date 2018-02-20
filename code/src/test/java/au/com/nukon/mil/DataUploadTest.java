@@ -1,11 +1,13 @@
 package au.com.nukon.mil;
 
+import au.com.nukon.mil.config.PreloadConfig;
 import au.com.nukon.mil.repositories.CustomerOrderRepository;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
@@ -35,12 +37,13 @@ public class DataUploadTest {
         if (!directory.exists()) {
             directory.mkdir();
         }
+        int initialCount = (int) customerOrderRepository.count();
         Resource resource = new ClassPathResource("sample.csv");
         File source = new File(resource.getURI());
         File destination = new File(path + "/" + "sample.csv");
         FileUtils.copyFile(source, destination);
         Thread.sleep(5000);
-        assertEquals(1, customerOrderRepository.count());
+        assertEquals(initialCount + 10, customerOrderRepository.count());
     }
 
 
