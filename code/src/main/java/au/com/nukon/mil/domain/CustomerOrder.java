@@ -1,12 +1,10 @@
 package au.com.nukon.mil.domain;
 
 
-import org.joda.time.DateTime;
+import java.time.Instant;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.annotation.Generated;
+import javax.persistence.*;
 import java.io.Serializable;
 
 
@@ -15,26 +13,27 @@ import java.io.Serializable;
 public class CustomerOrder implements Serializable {
 
     @Id
-    @Column(length=50)
-    private String orderID;
+    @GeneratedValue
+    @Column
+    private Long orderID;
 
     @Column(length=50)
     private String outletID;
 
     @Column(length=50)
-    private DateTime startTime;
+    private Instant startTime;
 
     @Column(length=50)
-    private DateTime endTime;
+    private Instant endTime;
 
     @Column(length=50)
     private Long flowRate;
 
-    public String getOrderID() {
+    public Long getOrderID() {
         return orderID;
     }
 
-    public void setOrderID(String orderID) {
+    public void setOrderID(Long orderID) {
         this.orderID = orderID;
     }
 
@@ -46,19 +45,19 @@ public class CustomerOrder implements Serializable {
         this.outletID = outletID;
     }
 
-    public DateTime getStartTime() {
+    public Instant getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(DateTime startTime) {
+    public void setStartTime(Instant startTime) {
         this.startTime = startTime;
     }
 
-    public DateTime getEndTime() {
+    public Instant getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(DateTime endTime) {
+    public void setEndTime(Instant endTime) {
         this.endTime = endTime;
     }
 

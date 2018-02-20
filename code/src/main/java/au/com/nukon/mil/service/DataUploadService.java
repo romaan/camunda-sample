@@ -39,7 +39,7 @@ public class DataUploadService {
     private Function<String, CustomerOrder> mapToItem = (String line) -> {
         String[] p = line.split(COMMA);// a CSV has comma separated lines
         CustomerOrder item = new CustomerOrder();
-        item.setOrderID(p[0]);//<-- this is the first column in the csv file
+        item.setOrderID(new Long(NumberUtils.toLong(p[0])));
         item.setOutletID(p[1]);
         item.setFlowRate(NumberUtils.toLong(p[2]));
         return item;

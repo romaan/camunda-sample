@@ -4,10 +4,9 @@
     <bpmn:startEvent id="customerOrderStart" name="Customer Order Starts">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="orderID" label="Order ID" type="string" />
           <camunda:formField id="outletID" label="Outlet ID" type="string" />
-          <camunda:formField id="startTime" label="Start Time" type="date" />
-          <camunda:formField id="endTime" label="End Time" type="date" />
+          <camunda:formField id="startTime" label="Start Time" type="string" />
+          <camunda:formField id="endTime" label="End Time" type="string" />
           <camunda:formField id="flowRate" label="Flow Rate" type="long" />
         </camunda:formData>
         <camunda:executionListener class="au.com.nukon.mil.adapters.CustomerOrderAdapter" event="end" />
@@ -24,12 +23,22 @@
         <camunda:connector>
           <camunda:inputOutput>
             <camunda:inputParameter name="url">http://localhost:5000/todo/api/v1.0/tasks</camunda:inputParameter>
-            <camunda:inputParameter name="method">GET</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
             <camunda:inputParameter name="headers">
               <camunda:map>
-                <camunda:entry key="Accept">application/json</camunda:entry>
+                <camunda:entry key="accept">application/json</camunda:entry>
+                <camunda:entry key="content-type">application/json</camunda:entry>
               </camunda:map>
             </camunda:inputParameter>
+            <camunda:inputParameter name="payload"><![CDATA[{
+"orderID": ${orderID},
+"outletID": ${outletID},
+"startTime": "${startTime}",
+"endTime": "${endTime}",
+"flowRate": ${flowRate}
+}
+]]></camunda:inputParameter>
+            <camunda:outputParameter name="response" />
           </camunda:inputOutput>
           <camunda:connectorId>http-connector</camunda:connectorId>
         </camunda:connector>
