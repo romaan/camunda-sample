@@ -1,4 +1,4 @@
-package au.com.nukon.mil.domain;
+package au.com.myapp.mil.domain;
 
 
 import java.time.Instant;

@@ -10,7 +10,7 @@
       <bpmn:incoming>SequenceFlow_0g004al</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0g004al" sourceRef="updateOrders" targetRef="finishUpdateOrders" />
-    <bpmn:serviceTask id="updateOrders" name="Update Orders" camunda:class="au.com.nukon.mil.adapters.UpdateOrdersAdapter">
+    <bpmn:serviceTask id="updateOrders" name="Update Orders" camunda:class="au.com.myapp.mil.adapters.UpdateOrdersAdapter">
       <bpmn:incoming>SequenceFlow_0bv5z1m</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0g004al</bpmn:outgoing>
     </bpmn:serviceTask>

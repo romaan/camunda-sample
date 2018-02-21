@@ -1,6 +1,6 @@
-package au.com.nukon.mil.repositories;
+package au.com.myapp.mil.repositories;
 
-import au.com.nukon.mil.domain.Outlet;
+import au.com.myapp.mil.domain.Outlet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

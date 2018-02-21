@@ -6,7 +6,7 @@
       <bpmn:incoming>SequenceFlow_00tnlo4</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_13ouay4" sourceRef="dbLookupService" targetRef="pushResults" />
-    <bpmn:serviceTask id="dbLookupService" name="DB Lookup Service" camunda:class="au.com.nukon.mil.adapters.OrderWorkflowAdapter">
+    <bpmn:serviceTask id="dbLookupService" name="DB Lookup Service" camunda:class="au.com.myapp.mil.adapters.OrderWorkflowAdapter">
       <bpmn:incoming>SequenceFlow_1n2px09</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_13ouay4</bpmn:outgoing>
     </bpmn:serviceTask>

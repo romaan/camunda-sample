@@ -1,9 +1,11 @@
-package au.com.nukon.mil.config;
+package au.com.myapp.mil.config;
 
-import org.springframework.core.env.Environment;
-import au.com.nukon.mil.service.FileMonitorService;
+import au.com.myapp.mil.service.DataUploadService;
+import au.com.myapp.mil.service.FileMonitorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -12,22 +14,22 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Configuration
-public class FileMonitorConfig {
+public class PreloadConfig {
 
     @Autowired
-    private FileMonitorService fileMonitorService;
+    private DataUploadService dataUploadService;
 
     @Autowired
     private Environment env;
 
     @PostConstruct
     public void updateData() throws IOException {
-        String monitorPath = env.getProperty("file-monitor.path");
-        if (monitorPath != null) {
-            Path path = Paths.get(monitorPath);
+        String fixturePath = env.getProperty("datasource.model.fixtures");
+        if (fixturePath != null) {
+            Path path = Paths.get(new ClassPathResource(fixturePath).getURI());
             File file = new File(path.toString());
             if (file.exists()) {
-                fileMonitorService.monitor(path);
+                dataUploadService.uploadData(path);
             } else {
                 System.out.println("Path does not exists, hence no monitoring of files");
             }

@@ -1,4 +1,4 @@
-package au.com.nukon.mil;
+package au.com.myapp.mil;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

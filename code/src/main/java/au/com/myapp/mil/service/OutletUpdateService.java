@@ -1,9 +1,9 @@
-package au.com.nukon.mil.service;
+package au.com.myapp.mil.service;
 
-import au.com.nukon.mil.domain.CustomerOrder;
-import au.com.nukon.mil.domain.Outlet;
-import au.com.nukon.mil.repositories.CustomerOrderRepository;
-import au.com.nukon.mil.repositories.OutletRepository;
+import au.com.myapp.mil.domain.CustomerOrder;
+import au.com.myapp.mil.domain.Outlet;
+import au.com.myapp.mil.repositories.CustomerOrderRepository;
+import au.com.myapp.mil.repositories.OutletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

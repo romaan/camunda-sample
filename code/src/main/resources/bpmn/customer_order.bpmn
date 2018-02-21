@@ -9,7 +9,7 @@
           <camunda:formField id="endTime" label="End Time" type="string" />
           <camunda:formField id="flowRate" label="Flow Rate" type="long" />
         </camunda:formData>
-        <camunda:executionListener class="au.com.nukon.mil.adapters.CustomerOrderAdapter" event="end" />
+        <camunda:executionListener class="au.com.myapp.mil.adapters.CustomerOrderAdapter" event="end" />
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_0flalxv</bpmn:outgoing>
     </bpmn:startEvent>

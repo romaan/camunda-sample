@@ -1,7 +1,7 @@
-package au.com.nukon.mil;
+package au.com.myapp.mil;
 
-import au.com.nukon.mil.config.PreloadConfig;
-import au.com.nukon.mil.repositories.CustomerOrderRepository;
+import au.com.myapp.mil.config.PreloadConfig;
+import au.com.myapp.mil.repositories.CustomerOrderRepository;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;

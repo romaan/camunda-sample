@@ -1,6 +1,6 @@
-package au.com.nukon.mil.adapters;
+package au.com.myapp.mil.adapters;
 
-import au.com.nukon.mil.service.OutletUpdateService;
+import au.com.myapp.mil.service.OutletUpdateService;
 import org.apache.commons.lang.math.NumberUtils;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;

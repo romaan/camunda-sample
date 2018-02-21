@@ -1,8 +1,8 @@
-package au.com.nukon.mil.adapters;
+package au.com.myapp.mil.adapters;
 
-import au.com.nukon.mil.domain.CustomerOrder;
-import au.com.nukon.mil.repositories.CustomerOrderRepository;
-import au.com.nukon.mil.service.CustomerOrderService;
+import au.com.myapp.mil.domain.CustomerOrder;
+import au.com.myapp.mil.repositories.CustomerOrderRepository;
+import au.com.myapp.mil.service.CustomerOrderService;
 import org.apache.commons.lang.math.NumberUtils;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.ExecutionListener;

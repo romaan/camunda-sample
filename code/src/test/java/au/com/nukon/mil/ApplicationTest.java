@@ -1,4 +1,4 @@
-package au.com.nukon.mil;
+package au.com.myapp.mil;
 
 public class ApplicationTest {
 

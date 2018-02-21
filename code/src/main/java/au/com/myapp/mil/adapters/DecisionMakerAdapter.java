@@ -1,4 +1,4 @@
-package au.com.nukon.mil.adapters;
+package au.com.myapp.mil.adapters;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.camunda.bpm.engine.delegate.DelegateExecution;

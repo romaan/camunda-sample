@@ -12,7 +12,7 @@
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1aa9vzd</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="saveCustomerRecord" name="Save Customer Record" camunda:class="au.com.nukon.mil.adapters.SaveCustomerAdapter">
+    <bpmn:serviceTask id="saveCustomerRecord" name="Save Customer Record" camunda:class="au.com.myapp.mil.adapters.SaveCustomerAdapter">
       <bpmn:incoming>SequenceFlow_1aa9vzd</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1g351rp</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -47,7 +47,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_1g351rp" sourceRef="saveCustomerRecord" targetRef="orderSubmitted" />
     <bpmn:boundaryEvent id="BoundaryEvent_0y170lo" attachedToRef="orderSubmitted">
       <bpmn:extensionElements>
-        <camunda:executionListener class="au.com.nukon.mil.adapters.DecisionMakerAdapter" event="end" />
+        <camunda:executionListener class="au.com.myapp.mil.adapters.DecisionMakerAdapter" event="end" />
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_0sw1w0s</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_0pi1utb" />

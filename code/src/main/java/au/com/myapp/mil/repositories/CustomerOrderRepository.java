@@ -1,6 +1,6 @@
-package au.com.nukon.mil.repositories;
+package au.com.myapp.mil.repositories;
 
-import au.com.nukon.mil.domain.CustomerOrder;
+import au.com.myapp.mil.domain.CustomerOrder;
 
 import java.io.Serializable;
 import java.time.Instant;

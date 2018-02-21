@@ -1,4 +1,4 @@
-package au.com.nukon.mil;
+package au.com.myapp.mil;
 
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;

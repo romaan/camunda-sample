@@ -1,4 +1,4 @@
-package au.com.nukon.mil.config;
+package au.com.myapp.mil.config;
 
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
