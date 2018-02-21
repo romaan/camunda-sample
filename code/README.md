@@ -75,7 +75,9 @@ The orders that fall between Start Time and End Time are retrieved from the cust
 Those orders are sent to the same SCADA REST API as in Workflow #1 (You should decide whether it is preferable to iterate the records and sent them individually (in production there may be as many as 150 per batch) or to send them as a single payload. If a single payload, the SCADA API will need to be updated or a new one written)
 
 To trigger a REST call make the following REST API call:
+
 POST: http://localhost:8080/rest/message
+```sh
 {
 	"messageName":"GetOrders",
 	"processVariables": {
@@ -89,16 +91,73 @@ POST: http://localhost:8080/rest/message
     	}
 	}
 }
+```
 
 ### MID-164 - SCADA Interface In Example
 
+An external system (SCADA) calls a REST API in Camunda with parameters:
+- Order ID (optional)
+- Outlet ID
+- Value (INT)
+- Time
+
+Camunda updates the structure_flowmeter DB table for the supplied Outlet ID as follows (insert a row if one does not exist):
+- previous_value = current_value
+- previous_value_dt = current_value_dt
+- current_value = Value
+- current_value_dt = Time
+- qty_delivered = current_value - Value (or current_value - previous_value)
+
+If Order ID is supplied, Camunda updates the customer_orders DB table for the supplied Order ID and Outlet ID as follows:
+- qty_delivered = qty_delivered + (qty_delivered as calculated in the previous step)
+- qty_delivered_dt = Time
+
 BPM: update_orders.bpmn
+
+POST http://localhost:8080/rest/message
+```sh
+{
+	"messageName":"OrderUpdateEvent",
+	"processVariables": {
+        "outletID":{
+            "value": "12312A",
+            "type": "string"
+        },
+        "time":{
+            "value": "2015-02-12T05:00:00.000Z",
+            "type": "string"
+        },
+        "value": {
+            "value": "12",
+            "type": "integer"
+        }
+	}
+}
+```
 
 ### MID-165 OutSystems Order Validation
 
 BPM: orders_validation.bpmn
 
 ### MID-166 OutSystems Order Placement Mockup
+
+This functionality will eventually be created in OutSystems, but for demonstration (to run   MID-165 TO DO OutSystems Order Validation Example) and templating purposes, can be created here.
+
+A User task UI requests the following information from a user:
+- Outlet ID
+- Start Time
+- End Time
+- Flow Rate
+
+The data is written to the CUSTOMER_ORDERS table in the database. An Order ID is returned as the Identity PK of the inserted record.
+
+An "Order Submitted" UI is loaded confirming the order details and giving the Order ID. The Status is listed as "Processing".
+
+The workflow pauses at this point pending confirmation/rejection of the order from the  MID-165 TO DO  OutSystems Order Validation Example workflow (true/false).
+- If True:
+Display a success page confirming the order details.
+- If false:
+Display a failure message and a link back to the order placement page.
 
 BPM: orders_workflow.bpmn
 

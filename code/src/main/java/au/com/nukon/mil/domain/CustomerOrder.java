@@ -18,13 +18,13 @@ public class CustomerOrder implements Serializable {
     @Column(length=50)
     private String outletID;
 
-    @Column(length=50)
+    @Column
     private Instant startTime;
 
-    @Column(length=50)
+    @Column
     private Instant endTime;
 
-    @Column(length=50)
+    @Column
     private Long flowRate;
 
     public Long getOrderID() {
