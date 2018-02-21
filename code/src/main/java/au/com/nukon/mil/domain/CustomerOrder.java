@@ -27,6 +27,9 @@ public class CustomerOrder implements Serializable {
     @Column
     private Long flowRate;
 
+    @Column
+    private Long qtyDelivered = 0L;
+
     public Long getOrderID() {
         return orderID;
     }
@@ -65,6 +68,14 @@ public class CustomerOrder implements Serializable {
 
     public void setFlowRate(Long flowRate) {
         this.flowRate = flowRate;
+    }
+
+    public Long getQtyDelivered() {
+        return qtyDelivered;
+    }
+
+    public void setQtyDelivered(Long qtyDelivered) {
+        this.qtyDelivered = qtyDelivered;
     }
 
 }

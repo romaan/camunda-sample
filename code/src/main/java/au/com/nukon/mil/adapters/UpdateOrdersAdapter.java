@@ -23,7 +23,12 @@ public class UpdateOrdersAdapter implements JavaDelegate {
         String outletID = delegateExecution.getVariable("outletID").toString();
         Instant time = Instant.parse(delegateExecution.getVariable("time").toString());
         Integer value = NumberUtils.toInt(delegateExecution.getVariable("value").toString());
-        outletUpdateService.upsert(outletID, value, time);
+        if (delegateExecution.hasVariable("orderID")) {
+            Long orderID = NumberUtils.toLong(delegateExecution.getVariable("orderID").toString());
+            outletUpdateService.upsert(outletID, value, time, orderID);
+        } else {
+            outletUpdateService.upsert(outletID, value, time);
+        }
     }
 
 }

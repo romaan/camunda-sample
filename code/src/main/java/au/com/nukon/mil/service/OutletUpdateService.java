@@ -1,6 +1,8 @@
 package au.com.nukon.mil.service;
 
+import au.com.nukon.mil.domain.CustomerOrder;
 import au.com.nukon.mil.domain.Outlet;
+import au.com.nukon.mil.repositories.CustomerOrderRepository;
 import au.com.nukon.mil.repositories.OutletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,10 @@ public class OutletUpdateService {
     @Autowired
     OutletRepository outletRepository;
 
-    public void upsert(String outletID, Integer value, Instant time) {
+    @Autowired
+    CustomerOrderRepository customerOrderRepository;
+
+    private void updateOutlet(String outletID, Integer value, Instant time) {
         Outlet outlet = outletRepository.findByOutletID(outletID);
         if (outlet == null) {
             outlet = new Outlet();
@@ -26,4 +31,18 @@ public class OutletUpdateService {
         outlet.setValue(value);
         outletRepository.save(outlet);
     }
+
+    public void upsert(String outletID, Integer value, Instant time) {
+        updateOutlet(outletID, value, time);
+    }
+
+    public void upsert(String outletID, Integer value, Instant time, Long orderID) {
+        updateOutlet(outletID, value, time);
+        CustomerOrder customerOrder = customerOrderRepository.findByOrderID(orderID);
+        if (customerOrder != null) {
+            customerOrder.setQtyDelivered(customerOrder.getQtyDelivered() + value);
+            customerOrderRepository.save(customerOrder);
+        }
+    }
+
 }

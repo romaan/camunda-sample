@@ -13,4 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CustomerOrderRepository extends JpaRepository<CustomerOrder,Long>, Serializable {
     Collection<CustomerOrder> findAllByStartTimeIsBetween(Instant start, Instant end);
+
+    CustomerOrder findByOrderID(Long orderID);
 }

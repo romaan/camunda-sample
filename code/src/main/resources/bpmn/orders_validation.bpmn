@@ -1,13 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.11.3">
-  <bpmn:process id="OrdersValidation" isExecutable="true">
-    <bpmn:startEvent id="StartEvent_1" />
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.11.3">
+  <bpmn:process id="OrdersValidation" name="Orders Validation" isExecutable="true">
+    <bpmn:startEvent id="startOrderValidation" name="Start Order Validation">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="outletID" label="Outlet ID" type="string" />
+          <camunda:formField id="startTime" label="Start Time" type="string" />
+          <camunda:formField id="endTime" label="End Time" type="string" />
+          <camunda:formField id="flowRate" label="Flow Rate" type="long" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_1aa9vzd</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="saveCustomerRecord" name="Save Customer Record" camunda:class="au.com.nukon.mil.adapters.SaveCustomerAdapter">
+      <bpmn:incoming>SequenceFlow_1aa9vzd</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1g351rp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1aa9vzd" sourceRef="startOrderValidation" targetRef="saveCustomerRecord" />
+    <bpmn:userTask id="statusPage" name="Status Page" camunda:candidateUsers="admin">
+      <bpmn:extensionElements>
+        <camunda:formData />
+        <camunda:inputOutput>
+          <camunda:outputParameter name="outletID">${outletID}</camunda:outputParameter>
+          <camunda:outputParameter name="orderID">${orderID}</camunda:outputParameter>
+          <camunda:outputParameter name="Result">${result}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0sw1w0s</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0djd4ee</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="EndEvent_0cjjpfz">
+      <bpmn:incoming>SequenceFlow_0djd4ee</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0djd4ee" sourceRef="statusPage" targetRef="EndEvent_0cjjpfz" />
+    <bpmn:userTask id="orderSubmitted" name="Order Submitted" camunda:candidateUsers="admin">
+      <bpmn:extensionElements>
+        <camunda:formData />
+        <camunda:inputOutput>
+          <camunda:outputParameter name="outletID">${outletID}</camunda:outputParameter>
+          <camunda:outputParameter name="orderID">${orderID}</camunda:outputParameter>
+          <camunda:outputParameter name="status">processing</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1g351rp</bpmn:incoming>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1g351rp" sourceRef="saveCustomerRecord" targetRef="orderSubmitted" />
+    <bpmn:boundaryEvent id="BoundaryEvent_0y170lo" attachedToRef="orderSubmitted">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="au.com.nukon.mil.adapters.DecisionMakerAdapter" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_0sw1w0s</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_0pi1utb" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0sw1w0s" sourceRef="BoundaryEvent_0y170lo" targetRef="statusPage" />
   </bpmn:process>
+  <bpmn:message id="Message_17s14un" />
+  <bpmn:message id="Message_004fngg" />
+  <bpmn:message id="Message_0pi1utb" name="HTTPDecisionMaker" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="OrdersValidation">
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="173" y="102" width="36" height="36" />
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="startOrderValidation">
+        <dc:Bounds x="191" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="182" y="138" width="55" height="24" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_03qrq97_di" bpmnElement="saveCustomerRecord">
+        <dc:Bounds x="306" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1aa9vzd_di" bpmnElement="SequenceFlow_1aa9vzd">
+        <di:waypoint xsi:type="dc:Point" x="227" y="120" />
+        <di:waypoint xsi:type="dc:Point" x="306" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="221.5" y="98.5" width="90" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_0a42ofd_di" bpmnElement="statusPage">
+        <dc:Bounds x="672" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0cjjpfz_di" bpmnElement="EndEvent_0cjjpfz">
+        <dc:Bounds x="841" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="814" y="141" width="90" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0djd4ee_di" bpmnElement="SequenceFlow_0djd4ee">
+        <di:waypoint xsi:type="dc:Point" x="772" y="120" />
+        <di:waypoint xsi:type="dc:Point" x="841" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="761.5" y="98.5" width="90" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_0q0t8h9_di" bpmnElement="orderSubmitted">
+        <dc:Bounds x="469" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1g351rp_di" bpmnElement="SequenceFlow_1g351rp">
+        <di:waypoint xsi:type="dc:Point" x="406" y="120" />
+        <di:waypoint xsi:type="dc:Point" x="469" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="393" y="99" width="90" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BoundaryEvent_07a6taf_di" bpmnElement="BoundaryEvent_0y170lo">
+        <dc:Bounds x="551" y="100" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="569" y="139" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0sw1w0s_di" bpmnElement="SequenceFlow_0sw1w0s">
+        <di:waypoint xsi:type="dc:Point" x="587" y="118" />
+        <di:waypoint xsi:type="dc:Point" x="672" y="119" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="629.5" y="97" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

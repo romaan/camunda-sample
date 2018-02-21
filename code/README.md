@@ -141,6 +141,8 @@ BPM: orders_validation.bpmn
 
 ### MID-166 OutSystems Order Placement Mockup
 
+BPM: orders_validation.bpmn
+
 This functionality will eventually be created in OutSystems, but for demonstration (to run   MID-165 TO DO OutSystems Order Validation Example) and templating purposes, can be created here.
 
 A User task UI requests the following information from a user:
@@ -159,7 +161,34 @@ Display a success page confirming the order details.
 - If false:
 Display a failure message and a link back to the order placement page.
 
-BPM: orders_workflow.bpmn
+BPM: orders_validation.bpmn
+
+POST: http://localhost:8080/rest/message
+{
+	"messageName":"HTTPDecisionMaker",
+	"processVariables": {
+    	"outletID":{
+        	"value": "12312A",
+        	"type": "string"
+    	},
+       "orderID":{
+        	"value": "1000",
+        	"type": "integer"
+    	},
+    	"startTimes": {
+    		"value": "2015-02-12T05:00:00.000Z,2015-03-12T05:00:00.000Z",
+    		"type": "string"
+    	},
+    	"endTimes": {
+    		"value": "2015-02-12T05:01:00.000Z,2015-03-12T06:00:00.000Z",
+    		"type": "integer"
+    	},
+    	"flowRates": {
+    		"values": "12,12",
+    		"type": "string"
+		}
+	}
+}
 
 ### MID-167 File Drop Interface IN Example
 

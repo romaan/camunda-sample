@@ -1,84 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.11.3">
-  <bpmn:process id="CountOrders" name="Count Orders" isExecutable="true">
-    <bpmn:sequenceFlow id="SequenceFlow_1anu7gt" sourceRef="OnDemand" targetRef="ExclusiveGateway_0nj010f" />
-    <bpmn:exclusiveGateway id="ExclusiveGateway_0nj010f">
-      <bpmn:incoming>SequenceFlow_1anu7gt</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0r3fxz0</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_0r3fxz0" sourceRef="ExclusiveGateway_0nj010f" targetRef="RestService" />
-    <bpmn:endEvent id="EndEvent_0qjw9p9">
-      <bpmn:incoming>SequenceFlow_10vt3wg</bpmn:incoming>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.11.3">
+  <bpmn:process id="OrdersWorkflow" isExecutable="true">
+    <bpmn:sequenceFlow id="SequenceFlow_1wqfudq" sourceRef="restEvent" targetRef="ExclusiveGateway_0nam8mb" />
+    <bpmn:endEvent id="EndEvent_1ihosr4">
+      <bpmn:incoming>SequenceFlow_00tnlo4</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_10vt3wg" sourceRef="RestService" targetRef="EndEvent_0qjw9p9" />
-    <bpmn:serviceTask id="RestService" name="Rest Service">
+    <bpmn:sequenceFlow id="SequenceFlow_13ouay4" sourceRef="dbLookupService" targetRef="pushResults" />
+    <bpmn:serviceTask id="dbLookupService" name="DB Lookup Service" camunda:class="au.com.nukon.mil.adapters.OrderWorkflowAdapter">
+      <bpmn:incoming>SequenceFlow_1n2px09</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_13ouay4</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:startEvent id="restEvent" name="Rest Event">
+      <bpmn:documentation><![CDATA[To start this process, post to this enpoint:
+
+/camunda/rest/message
+
+Body
+{
+  messageName:"GetOrders",
+  processVariables: {
+       "startTime":{
+          value: "2013-02-12T23:00:00.000Z",
+          type: "date"
+     },
+       "endTime":{
+          value: "2015-02-12T23:00:00.000Z",
+          type: "date"
+     }
+  }
+}]]></bpmn:documentation>
+      <bpmn:outgoing>SequenceFlow_1wqfudq</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_029becu" />
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_00tnlo4" sourceRef="pushResults" targetRef="EndEvent_1ihosr4" />
+    <bpmn:serviceTask id="pushResults" name="Push Results">
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://localhost:5000/todo/api/v1.0/tasks</camunda:inputParameter>
-            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://localhost:5000/todo/api/v1.0/orders</camunda:inputParameter>
             <camunda:inputParameter name="headers">
               <camunda:map>
-                <camunda:entry key="Content-Type">application/json</camunda:entry>
+                <camunda:entry key="accept">application/json</camunda:entry>
+                <camunda:entry key="content-type">application/json</camunda:entry>
               </camunda:map>
             </camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="payload">${records}</camunda:inputParameter>
           </camunda:inputOutput>
           <camunda:connectorId>http-connector</camunda:connectorId>
         </camunda:connector>
       </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_0r3fxz0</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_10vt3wg</bpmn:outgoing>
+      <bpmn:incoming>SequenceFlow_13ouay4</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_00tnlo4</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:startEvent id="OnDemand" name="On Demand">
-      <bpmn:outgoing>SequenceFlow_1anu7gt</bpmn:outgoing>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0nam8mb">
+      <bpmn:incoming>SequenceFlow_0gcca2s</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1wqfudq</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1n2px09</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0gcca2s" sourceRef="periodicEvent" targetRef="ExclusiveGateway_0nam8mb" />
+    <bpmn:sequenceFlow id="SequenceFlow_1n2px09" sourceRef="ExclusiveGateway_0nam8mb" targetRef="dbLookupService" />
+    <bpmn:startEvent id="periodicEvent" name="Periodic Event">
+      <bpmn:documentation>Repeat the trigger every 1 hour, for testing we have set to 1 minute</bpmn:documentation>
+      <bpmn:outgoing>SequenceFlow_0gcca2s</bpmn:outgoing>
+      <bpmn:timerEventDefinition>
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R/PT1H</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
     </bpmn:startEvent>
   </bpmn:process>
+  <bpmn:message id="Message_029becu" name="GetOrders" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CountOrders">
-      <bpmndi:BPMNEdge id="SequenceFlow_1anu7gt_di" bpmnElement="SequenceFlow_1anu7gt">
-        <di:waypoint xsi:type="dc:Point" x="209" y="120" />
-        <di:waypoint xsi:type="dc:Point" x="284" y="120" />
-        <di:waypoint xsi:type="dc:Point" x="284" y="177" />
-        <di:waypoint xsi:type="dc:Point" x="284" y="187" />
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="OrdersWorkflow">
+      <bpmndi:BPMNEdge id="SequenceFlow_1wqfudq_di" bpmnElement="SequenceFlow_1wqfudq">
+        <di:waypoint xsi:type="dc:Point" x="184" y="29" />
+        <di:waypoint xsi:type="dc:Point" x="258" y="29" />
+        <di:waypoint xsi:type="dc:Point" x="258" y="95" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="254" y="142" width="90" height="13" />
+          <dc:Bounds x="221" y="7.5" width="0" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ExclusiveGateway_0nj010f_di" bpmnElement="ExclusiveGateway_0nj010f" isMarkerVisible="true">
-        <dc:Bounds x="259" y="187" width="50" height="50" />
+      <bpmndi:BPMNShape id="EndEvent_1ihosr4_di" bpmnElement="EndEvent_1ihosr4">
+        <dc:Bounds x="656" y="102" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="284" y="240" width="0" height="13" />
+          <dc:Bounds x="674" y="141" width="0" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0r3fxz0_di" bpmnElement="SequenceFlow_0r3fxz0">
-        <di:waypoint xsi:type="dc:Point" x="309" y="212" />
-        <di:waypoint xsi:type="dc:Point" x="334" y="212" />
-        <di:waypoint xsi:type="dc:Point" x="334" y="212" />
-        <di:waypoint xsi:type="dc:Point" x="365" y="212" />
+      <bpmndi:BPMNEdge id="SequenceFlow_13ouay4_di" bpmnElement="SequenceFlow_13ouay4">
+        <di:waypoint xsi:type="dc:Point" x="405" y="120" />
+        <di:waypoint xsi:type="dc:Point" x="473" y="120" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="349" y="205.5" width="0" height="13" />
+          <dc:Bounds x="439" y="98.5" width="0" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="EndEvent_0qjw9p9_di" bpmnElement="EndEvent_0qjw9p9">
-        <dc:Bounds x="544" y="194" width="36" height="36" />
+      <bpmndi:BPMNShape id="ServiceTask_0xhe4pu_di" bpmnElement="dbLookupService">
+        <dc:Bounds x="305" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_02c6rpx_di" bpmnElement="restEvent">
+        <dc:Bounds x="148" y="11" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="562" y="233" width="0" height="13" />
+          <dc:Bounds x="140" y="47" width="54" height="12" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_10vt3wg_di" bpmnElement="SequenceFlow_10vt3wg">
-        <di:waypoint xsi:type="dc:Point" x="465" y="212" />
-        <di:waypoint xsi:type="dc:Point" x="544" y="212" />
+      <bpmndi:BPMNEdge id="SequenceFlow_00tnlo4_di" bpmnElement="SequenceFlow_00tnlo4">
+        <di:waypoint xsi:type="dc:Point" x="573" y="120" />
+        <di:waypoint xsi:type="dc:Point" x="656" y="120" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="504.5" y="190.5" width="0" height="13" />
+          <dc:Bounds x="614.5" y="98.5" width="0" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_1e37qw9_di" bpmnElement="RestService">
-        <dc:Bounds x="365" y="172" width="100" height="80" />
+      <bpmndi:BPMNShape id="ServiceTask_0vvye2n_di" bpmnElement="pushResults">
+        <dc:Bounds x="473" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="StartEvent_09o5lcq_di" bpmnElement="OnDemand">
-        <dc:Bounds x="173" y="102" width="36" height="36" />
+      <bpmndi:BPMNShape id="ExclusiveGateway_0nam8mb_di" bpmnElement="ExclusiveGateway_0nam8mb" isMarkerVisible="true">
+        <dc:Bounds x="232.83800000000002" y="94.838" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="117" y="138" width="60" height="12" />
+          <dc:Bounds x="257.838" y="147.838" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0gcca2s_di" bpmnElement="SequenceFlow_0gcca2s">
+        <di:waypoint xsi:type="dc:Point" x="184" y="232" />
+        <di:waypoint xsi:type="dc:Point" x="258" y="232" />
+        <di:waypoint xsi:type="dc:Point" x="258" y="145" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="221" y="210.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1n2px09_di" bpmnElement="SequenceFlow_1n2px09">
+        <di:waypoint xsi:type="dc:Point" x="283" y="120" />
+        <di:waypoint xsi:type="dc:Point" x="305" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="294" y="98.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="StartEvent_04axysx_di" bpmnElement="periodicEvent">
+        <dc:Bounds x="148" y="214" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="135" y="253" width="71" height="12" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
